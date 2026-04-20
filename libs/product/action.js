@@ -1,4 +1,4 @@
-import pool from "@/lib/db";
+import pool from "@/libs/db";
 
 export async function getAllProducts() {
     try{
@@ -9,5 +9,19 @@ export async function getAllProducts() {
     } catch (error) {
         console.error("Error fetching products:", error);
         throw new Error("Failed to fetch products");
+    }
+}
+
+export async function createProduct(productData) {
+    try{
+        const { nama, price, stock } = productData;
+        const [result] = await pool.query(
+            "INSERT INTO products (name, price, stock) VALUES (?, ?, ?)",
+            [name, price, stock],
+        );
+        return result.insertId;
+    } catch (error) {
+        console.error("Error creating product:", error);
+        throw new Error("Failed to create product");
     }
 }
