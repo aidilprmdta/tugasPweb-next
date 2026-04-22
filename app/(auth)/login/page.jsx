@@ -30,7 +30,7 @@ export default function LoginPage() {
                         />
                     </div>
                     <Link
-                        href="/"
+                        href="/product"
                         className="bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 mt-4 block"
                     >
                         Masuk ke Dashboard

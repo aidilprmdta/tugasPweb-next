@@ -1,7 +1,7 @@
 export default async function Home() {
     return (
     <div className="space-y-8">
-        <div className="bg-linear-to-r from-blue-500 to-indigo-700 text-white p-8 rounded-2xl shadow-lg">
+        <div className="bg-linear-to-r from-blue-600 to-indigo-700 text-white p-8 rounded-2xl shadow-lg">
             <div className="flex item-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold mb-2">

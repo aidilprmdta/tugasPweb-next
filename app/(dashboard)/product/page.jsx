@@ -1,7 +1,18 @@
-import { getAllProducts } from "@/libs/product/action";
+import { getAllProducts, getProductCount, deleteProduct } from "@/libs/product/action";
+import { redirect } from "next/navigation";
+import DeleteModal from "./components/DeleteModal";
+export default async function Home({ searchParams }) {
+    const sp = await searchParams;
+    const search = sp.search || "";
+    const currentPage = Number(sp.page) || 1;
+    const limit = 3;
 
-export default async function Home() {
-    const products = await getAllProducts();
+    const [products, totalItems] =  await Promise.all([
+        getAllProducts(search, currentPage, limit),
+        getProductCount(search),
+    ]);
+
+    const totalPages = Math.ceil(totalItems / limit);
 
     return (
         <div>
@@ -9,7 +20,7 @@ export default async function Home() {
                 <h2 className="text-2xl font-bold">
                     Daftar Barang
                 </h2>
-                <a href="/tambah" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                <a href="/product/tambah" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     + Tambah Barang
                 </a>
             </div>
@@ -26,18 +37,63 @@ export default async function Home() {
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product, index) => (
-                            {products.map((product, index) => ( 
-                                <tr key={product.id} className={`border-b transition-colors duration-200 ${ index % 2 === 0 ? "bg-gray-100" : "bg-white" } hover:bg-blue-100`} > <td className="p-4 text-gray-700 font-medium">{product.id}</td> <td className="p-4 text-gray-800 font-medium"> {product.name} </td> <td className="p-4 text-green-600 font-semibold text-right"> Rp{" "} {Number(product.price).toLocaleString("id-ID", { minimumFractionDigits: 0, maximumFractionDigits: 0, })} </td> <td className="p-4 text-center"> <span className={`px-3 py-1 rounded-full text-sm font-semibold ${ product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700" }`} > {product.
-                    </tbody>
-                </table>
+                        {products.map((product, index) => ( 
+                            <tr key={product.id} 
+                            className={`border-b transition-colors duration-200 ${ index % 2 === 0 ? "bg-gray-100" : "bg-white" } hover:bg-blue-100`} > 
+                            <td className="p-4 text-gray-700 font-medium">{product.id}
+                                </td> 
+                            <td className="p-4 text-gray-800 font-medium"> 
+                                {product.name} </td> <td className="p-4 text-green-600 font-semibold text-right"> 
+                                    Rp{" "} {Number(product.price).toLocaleString("id-ID", { minimumFractionDigits: 0, maximumFractionDigits: 0, })} 
+                                    </td> <td className="p-4 text-center"> <span className={`px-3 py-1 rounded-full text-sm font-semibold ${ product.stock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700" }`} >
+                                        {product.stock}
+                                        </span>
+                                    </td>
+                                    <td className="p-4 text-center space -x-2">
+                                        <a href="" className="inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                                            Edit
+                                        </a>
+
+                                        <DeleteModal
+                                            product={product.id}
+                                            productName={product.name}
+                                            deleteAction={deleteProductAction.bind(null, product.id)}
+                                        />
+                                    </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                <div className="mt-6 flex justify-center gap-2">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                        <a 
+                        key={p}
+                        href={`?search=${search}&page=${p}`}
+                        className={`px-4 py-2 rounded border ${ 
+                            p === currentPage ? "bg-blue-600 text-white" : "bg-white"
+                        }`}
+                        >
+                            {p}
+                        </a>
+                    ))}
+                </div>
+            </div>  
             </div>
-            <h1>Product List</h1>
-            <ul>
-                {products.map((product) => (
-                    <li key={product.id}>{product.name}</li>
-                ))}
-            </ul>
-        </div>
     );
+}
+
+async function deleteProductAction(productId) {
+    "use server"
+
+    try {
+        const success = await deleteProduct(productId);
+        if (!success) {
+            throw new Error("Product tidak ditemukan");
+        }
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        throw new Error("Gagal menghapus produk");
+    }
+        redirect("/product");
 }
