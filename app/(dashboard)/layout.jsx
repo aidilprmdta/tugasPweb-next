@@ -14,8 +14,8 @@ export  default function DashboardLayout({ children }) {
                             Produk
                         </Link>
                         <Link
-                            href="/logout"
-                            className="hover:text-red-200 font-medium font-medium"
+                            href="/login"
+                            className="hover:text-red-200 font-medium"
                         >
                             Logout
                         </Link>
