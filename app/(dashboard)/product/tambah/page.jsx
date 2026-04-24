@@ -73,18 +73,10 @@ export default function TambahProductPage() {
 export async function handleSubmit(formData) {
     "use server";
 
-    console.log("Data mentah Nama:", formData.get("name"));
-    console.log("Data mentah Harga:", formData.get("price"));
-    console.log("Data mentah Stok:", formData.get("stock"));
+    const name = formData.get("name")?.toString().trim();
+    const price = parseFloat(formData.get("price"));
+    const stock = parseInt(formData.get("stock"));
 
-    const rawName = formData.get("name");
-    const rawPrice = formData.get("price");
-    const rawStock = formData.get("stock");
-
-    const name = rawName ? rawName.toString().trim() : "";
-    const price = parseFloat(rawPrice);
-    const stock = parseInt(rawStock);
-    
     if (!name || name.length === 0) {
         throw new Error("Nama produk tidak boleh kosong");
     }
@@ -96,7 +88,7 @@ export async function handleSubmit(formData) {
     }
 
     try {
-        await createProduct(name, price, stock);
+        await createProduct({name, price, stock});
     } catch (error) {
        console.error("error creating product:",  error)
        throw new Error("Gagal menambahkan produk");
