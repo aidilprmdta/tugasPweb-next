@@ -42,10 +42,11 @@ export default async function EditProductPage({ params }) {
                             </label>
                             <div className="md:col-span-2 order-2 md:order-2">
                                 <input 
-                                    type="text" id="name" required 
+                                    type="text" id="name" name="name" 
+                                    required 
                                     placeholder="Masukkan nama produk"
                                     defaultValue={product.name}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900" />
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-500 text-gray-900"/>
                             </div>
                         </div>
 
@@ -117,7 +118,7 @@ async function handleUpdate(id, formData) {
     }
 
     try {
-        await updateProduct(id, name, price, stock);
+        await updateProduct(id, {name, price, stock});
     } catch (error) {
         console.error("Error updating product:", error);
         throw new Error("Gagal mengupdate produk");
