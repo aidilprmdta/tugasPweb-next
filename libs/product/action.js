@@ -8,12 +8,10 @@ export async function getAllProducts(search = "", page = 1, limit = 10) {
       "SELECT * FROM products WHERE name LIKE ? ORDER BY id ASC LIMIT ? OFFSET ?",
       [searchTerm, limit, offset],
     );
-    console.log("Hallo");
-
-    return [];
+    return products; 
   } catch (error) {
     console.error("Error fetching products:", error);
-    return;
+    return []; 
   }
 }
 
@@ -22,10 +20,11 @@ export async function getProductCount(search = "") {
   try {
     const [rows] = await pool.query(
       "SELECT COUNT(*) as count FROM products WHERE name LIKE ?",
-      [searchTerm],
+      [searchTerm]
     );
     return rows[0].count;
   } catch (error) {
+    console.error("Error counting products:", error);
     return 0;
   }
 }
@@ -48,7 +47,7 @@ export async function updateProduct(id, productData) {
   try {
     const { name, price, stock } = productData;
     const [result] = await pool.query(
-      "UPDATE products SET name = ?, stock = ? WHERE id =",
+      "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?", // BUG DIPERBAIKI: SQL disempurnakan
       [name, price, stock, id],
     );
     return result.affectedRows > 0;
@@ -67,5 +66,15 @@ export async function deleteProduct(id) {
   } catch (error) {
     console.error("Error deleting product:", error);
     throw new Error("Failed to delete product");
+  }
+}
+
+export async function getProductById(id) {
+  try {
+    const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [id]);
+    return rows[0]; // Mengembalikan satu barang saja
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    return null;
   }
 }
