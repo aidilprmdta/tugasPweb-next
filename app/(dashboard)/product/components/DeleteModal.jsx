@@ -10,28 +10,34 @@ export default function DeleteModal({ productId, productName, deleteAction }) {
     
     return (
         <>
-            <button onClick={handleOpen} className="text-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-200 text-sm font-medium ml-2">
+            <button 
+                onClick={handleOpen} 
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors duration-200 text-sm font-medium ml-2"
+            >
                 Hapus
             </button>
 
             {isOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
                         <div className="mb-6">
                             <p className="text-gray-700">
-                                Apakah Anda yakin ingin menghapus produk 
-                                <strong>{productName}</strong>?
+                                Apakah Anda yakin ingin menghapus produk <strong>{productName}</strong>?
                             </p>
                         </div>
 
                         <div className="flex justify-end space-x-3">
                             <button 
                                 onClick={handleClose} 
-                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors">
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-md hover:bg-gray-200 transition-colors"
+                            >
                                 Batal
                             </button>
-                            <form action={deleteAction} method="post" className="inline">
-                                <button className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-red-500 transition-colors">
+                            <form action={deleteAction} className="inline">
+                                <button 
+                                    type="submit"
+                                    className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 transition-colors"
+                                >
                                     Hapus Produk
                                 </button>
                             </form>
