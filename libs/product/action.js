@@ -47,7 +47,7 @@ export async function updateProduct(id, productData) {
   try {
     const { name, price, stock } = productData;
     const [result] = await pool.query(
-      "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?", // BUG DIPERBAIKI: SQL disempurnakan
+      "UPDATE products SET name = ?, price = ?, stock = ? WHERE id = ?",
       [name, price, stock, id],
     );
     return result.affectedRows > 0;
@@ -72,7 +72,7 @@ export async function deleteProduct(id) {
 export async function getProductById(id) {
   try {
     const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [id]);
-    return rows[0]; // Mengembalikan satu barang saja
+    return rows[0];
   } catch (error) {
     console.error("Error fetching product by ID:", error);
     return null;
