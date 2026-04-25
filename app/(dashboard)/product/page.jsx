@@ -106,3 +106,4 @@ async function deleteProductAction(productId) {
     
     revalidatePath("/product"); 
 }
+
