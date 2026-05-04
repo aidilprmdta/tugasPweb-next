@@ -1,6 +1,17 @@
+"use client";
+import { useState } from "react";
+import { authenticate } from "@/libs/auth/action";
 import Link from "next/link";
+import { useFormStatus } from "react-dom"
 
 export default function LoginPage() {
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const handleSubmit = async (formData) => {
+        const error = await authenticate(formData);
+        if (error) setErrorMessage(error);
+    };
+
     return (
         <main className="min-h-screen flex items-center justify-center bg-gray-200">
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
@@ -8,15 +19,16 @@ export default function LoginPage() {
                     Login Maju Jaya
                 </h1>
 
-                <form className="flex flex-col gap-4">
+                <form className="flex flex-col gap-4" action={handleSubmit}>
                     <div>
                         <label className="block mb-1 font-medium text-gray-700">
                             Username
-                        </label>    
+                        </label>
                         <input
                             type="text"
+                            name="username"
                             required
-                            className="w-full border p-2 rounded focus:outline-blue-500"
+                            className="w-full text-black border p-2 rounded focus:outline-blue-500"
                         />
                     </div>
                     <div>
@@ -25,18 +37,36 @@ export default function LoginPage() {
                         </label>
                         <input
                             type="password"
+                            name="password"
                             required
                             className="w-full border p-2 rounded focus:outline-blue-500"
                         />
                     </div>
-                    <Link
-                        href="/product"
-                        className="bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 mt-4 block"
-                    >
-                        Masuk ke Dashboard
+
+                    {errorMessage && (
+                        <p className="text-red-500 text-sm italic">{errorMessage}</p>
+                    )}
+
+                    <LogginButton />
+
+                    <Link href="/register" className="text-center text-sm text-gray-600 hover:text-gray-800 mt-4">
+                        Belum punya akun? Daftar di sini
                     </Link>
                 </form>
             </div>
         </main>
+    );
+}
+
+function LogginButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button
+            type="submit"
+            disabled={pending}
+            className="bg-blue-600 text-white text-center py-2 rounded hover:bg-blue-700 mt-4 block disabled:bg-gray-400"
+        >
+            {pending ? "Memproses..." : "Masuk ke Dashboard"}
+        </button>
     );
 }

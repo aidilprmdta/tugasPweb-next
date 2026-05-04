@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { handleLogout } from "@/libs/auth/action";
 
 export  default function DashboardLayout({ children }) {
     return (

@@ -8,7 +8,7 @@ export default async function Home() {
                         Selamat Datang!
                     </h1>
                     <p className="text-blue-100 text-lg">
-                        Dashboard Sistem Inventaris Maju JJaya
+                        Dashboard Sistem Inventaris Maju Jaya
                     </p>
                 </div>
             </div>
